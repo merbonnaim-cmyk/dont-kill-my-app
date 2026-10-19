@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0b0d12">
+  <title>Qalbiah Studio</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <span class="logo" aria-hidden="true">☾</span>
+      <div>
+        <h1>Qalbiah Studio</h1>
+        <p class="tagline">Кинематографические исламские истории · Seedance 2.5 · 9:16</p>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <form id="form" class="card form" autocomplete="off">
+      <label class="field">
+        <span class="label">Тема истории</span>
+        <textarea id="topic" rows="2" maxlength="200" placeholder="Например: Терпение пророка Айюба (мир ему)" required></textarea>
+      </label>
+      <div class="chips" id="examples" aria-label="Примеры тем">
+        <button type="button" class="chip">Пророк Юнус (мир ему) во чреве кита</button>
+        <button type="button" class="chip">Пророк Ибрахим (мир ему) и огонь</button>
+        <button type="button" class="chip">Люди пещеры</button>
+        <button type="button" class="chip">Пророк Нух (мир ему) и ковчег</button>
+      </div>
+
+      <div class="field">
+        <span class="label">Количество сцен: <output id="scenesOut">6</output></span>
+        <div class="stepper">
+          <button type="button" class="step" data-step="-1" aria-label="Меньше сцен">−</button>
+          <input id="scenes" type="range" min="4" max="12" value="6">
+          <button type="button" class="step" data-step="1" aria-label="Больше сцен">+</button>
+        </div>
+      </div>
+
+      <div class="grid2">
+        <label class="field">
+          <span class="label">Место действия</span>
+          <select id="setting">
+            <option value="desert">Пустыня</option>
+            <option value="night">Ночь, звёзды</option>
+            <option value="sea">Море</option>
+            <option value="city">Древний город</option>
+            <option value="mountains">Горы, пещеры</option>
+            <option value="garden">Оазис</option>
+          </select>
+        </label>
+        <label class="field">
+          <span class="label">Настроение</span>
+          <select id="mood">
+            <option value="awe">Благоговение</option>
+            <option value="hope">Надежда</option>
+            <option value="trial">Испытание, терпение</option>
+            <option value="reflection">Размышление</option>
+            <option value="warning">Назидание</option>
+          </select>
+        </label>
+        <label class="field">
+          <span class="label">Визуальный стиль</span>
+          <select id="style">
+            <option value="cinematic">Фотореализм, кино</option>
+            <option value="painterly">Живописный</option>
+            <option value="minimal">Минимализм</option>
+          </select>
+        </label>
+        <label class="field">
+          <span class="label">Длина сцены</span>
+          <select id="duration">
+            <option value="5">5 секунд</option>
+            <option value="10">10 секунд</option>
+          </select>
+        </label>
+      </div>
+
+      <label class="toggle">
+        <input type="checkbox" id="hasProphet">
+        <span class="switch" aria-hidden="true"></span>
+        <span>В истории есть пророк <small id="detected"></small></span>
+      </label>
+      <label class="toggle">
+        <input type="checkbox" id="veilCompanions" checked>
+        <span class="switch" aria-hidden="true"></span>
+        <span>Скрывать лица сподвижников</span>
+      </label>
+
+      <button type="submit" class="btn primary">Сгенерировать историю</button>
+    </form>
+
+    <section id="result" hidden>
+      <div class="toolbar">
+        <button type="button" class="btn" id="regen">↻ Другой вариант</button>
+        <button type="button" class="btn" id="copyAll">Копировать все промпты</button>
+        <button type="button" class="btn" id="dlTxt">Скачать .txt</button>
+        <button type="button" class="btn" id="dlJson">Скачать .json</button>
+      </div>
+
+      <div class="card summary">
+        <h2 id="resTitle"></h2>
+        <div class="badges" id="badges"></div>
+        <ol class="timeline" id="timeline"></ol>
+      </div>
+
+      <details class="card rules" open>
+        <summary>Правила изображения</summary>
+        <ul id="rules"></ul>
+      </details>
+
+      <details class="card verify" open>
+        <summary>⚠ Требует проверки</summary>
+        <ul id="verify"></ul>
+        <p class="hint">Генератор не придумывает аяты, хадисы, имена и даты. Поля с меткой <mark>[ПРОВЕРИТЬ]</mark> заполните сами по Корану, достоверным хадисам и признанным тафсирам.</p>
+      </details>
+
+      <div id="scenesList"></div>
+    </section>
+
+    <footer class="foot">Работает офлайн · без API и ключей · данные хранятся только в вашем браузере</footer>
+  </main>
+
+  <div id="toast" role="status" aria-live="polite"></div>
+
+  <template id="sceneTpl">
+    <article class="card scene">
+      <div class="scene-head">
+        <div class="frame" aria-hidden="true"><span></span></div>
+        <div>
+          <div class="scene-num"></div>
+          <div class="scene-act"></div>
+        </div>
+      </div>
+      <p class="purpose"></p>
+      <dl class="facts">
+        <dt>Описание</dt><dd data-k="description"></dd>
+        <dt>Действие</dt><dd data-k="action"></dd>
+        <dt>Освещение</dt><dd data-k="lighting"></dd>
+        <dt>Камера</dt><dd data-k="camera"></dd>
+      </dl>
+      <ul class="scene-verify"></ul>
+      <div class="prompt-box">
+        <div class="prompt-head">
+          <span>Промпт Seedance 2.5</span>
+          <button type="button" class="btn small copy" data-what="prompt">Копировать</button>
+        </div>
+        <textarea class="prompt" rows="6" spellcheck="false"></textarea>
+        <div class="prompt-head">
+          <span>Negative prompt</span>
+          <button type="button" class="btn small copy" data-what="negative">Копировать</button>
+        </div>
+        <textarea class="negative" rows="2" spellcheck="false"></textarea>
+      </div>
+    </article>
+  </template>
+
+  <script src="engine.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
