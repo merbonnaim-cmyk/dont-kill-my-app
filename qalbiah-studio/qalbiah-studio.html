@@ -1,0 +1,933 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0b0d12">
+  <title>Qalbiah Studio</title>
+  <style>
+:root {
+  --bg: #0b0d12;
+  --bg2: #11141b;
+  --card: #151924;
+  --line: #262c3a;
+  --text: #e9e6df;
+  --muted: #9097a6;
+  --gold: #d6b16a;
+  --gold2: #f0d79c;
+  --warn: #f2b45a;
+  --warn-bg: rgba(242, 180, 90, .08);
+  --radius: 16px;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: radial-gradient(1200px 600px at 50% -200px, #1b1f2c 0%, var(--bg) 60%) fixed, var(--bg);
+  color: var(--text);
+  font: 16px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+.topbar {
+  border-bottom: 1px solid var(--line);
+  padding: 12px 16px;
+  padding-top: max(12px, env(safe-area-inset-top));
+}
+.brand { display: flex; gap: 12px; align-items: center; max-width: 760px; margin: 0 auto; }
+.logo {
+  width: 40px; height: 40px; border-radius: 12px; flex: none;
+  display: grid; place-items: center; font-size: 22px;
+  color: #1a1408; background: linear-gradient(135deg, var(--gold2), var(--gold));
+}
+h1 { margin: 0; font-size: 18px; letter-spacing: .02em; }
+.tagline { margin: 0; color: var(--muted); font-size: 12px; }
+
+.wrap { max-width: 760px; margin: 0 auto; padding: 16px; }
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 16px;
+  margin-bottom: 14px;
+}
+
+.field { display: block; margin-bottom: 14px; }
+.label { display: block; font-size: 13px; color: var(--muted); margin-bottom: 6px; }
+textarea, select, input[type=range] { width: 100%; font: inherit; color: var(--text); }
+textarea, select {
+  background: var(--bg2);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 12px;
+  font-size: 16px; /* без автозума на iOS */
+}
+textarea { resize: vertical; }
+textarea:focus, select:focus { outline: 2px solid var(--gold); outline-offset: 1px; border-color: transparent; }
+select { appearance: none; background-image: linear-gradient(45deg, transparent 50%, var(--muted) 50%), linear-gradient(135deg, var(--muted) 50%, transparent 50%); background-position: calc(100% - 18px) 50%, calc(100% - 13px) 50%; background-size: 5px 5px; background-repeat: no-repeat; padding-right: 32px; }
+
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0 12px; }
+@media (max-width: 420px) { .grid2 { grid-template-columns: 1fr; } }
+
+.chips { display: flex; gap: 8px; overflow-x: auto; margin: -4px 0 14px; padding-bottom: 4px; scrollbar-width: none; }
+.chip {
+  flex: none; font: inherit; font-size: 13px; color: var(--gold2);
+  background: rgba(214, 177, 106, .08); border: 1px solid rgba(214, 177, 106, .25);
+  border-radius: 999px; padding: 6px 12px; cursor: pointer;
+}
+
+.stepper { display: flex; gap: 10px; align-items: center; }
+.step {
+  width: 44px; height: 44px; flex: none; border-radius: 12px;
+  border: 1px solid var(--line); background: var(--bg2); color: var(--text); font-size: 22px; cursor: pointer;
+}
+input[type=range] { accent-color: var(--gold); height: 44px; }
+output { color: var(--gold2); font-weight: 600; }
+
+.toggle { display: flex; align-items: center; gap: 12px; margin: 6px 0 12px; cursor: pointer; min-height: 44px; }
+.toggle input { position: absolute; opacity: 0; pointer-events: none; }
+.switch { width: 46px; height: 26px; flex: none; border-radius: 999px; background: var(--line); position: relative; transition: background .2s; }
+.switch::after { content: ""; position: absolute; top: 3px; left: 3px; width: 20px; height: 20px; border-radius: 50%; background: #fff; transition: transform .2s; }
+.toggle input:checked + .switch { background: var(--gold); }
+.toggle input:checked + .switch::after { transform: translateX(20px); }
+.toggle input:focus-visible + .switch { outline: 2px solid var(--gold2); outline-offset: 2px; }
+.toggle small { display: block; color: var(--gold2); font-size: 12px; }
+
+.btn {
+  font: inherit; font-size: 14px; color: var(--text); cursor: pointer;
+  background: var(--bg2); border: 1px solid var(--line); border-radius: 12px;
+  padding: 10px 14px; min-height: 44px;
+}
+.btn:active { transform: scale(.98); }
+.btn.primary {
+  width: 100%; font-size: 16px; font-weight: 600; color: #1a1408; border: 0; margin-top: 6px;
+  background: linear-gradient(135deg, var(--gold2), var(--gold));
+  box-shadow: 0 8px 30px rgba(214, 177, 106, .2);
+}
+.btn.small { min-height: 34px; padding: 6px 12px; font-size: 13px; }
+
+.toolbar { display: flex; gap: 8px; overflow-x: auto; margin-bottom: 14px; scrollbar-width: none; }
+.toolbar .btn { flex: none; }
+
+.summary h2 { margin: 0 0 8px; font-size: 20px; }
+.badges { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
+.badge { font-size: 12px; padding: 4px 10px; border-radius: 999px; background: var(--bg2); border: 1px solid var(--line); color: var(--muted); }
+.badge.gold { color: var(--gold2); border-color: rgba(214, 177, 106, .4); }
+
+.timeline { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+.timeline li { border-radius: 10px; padding: 8px; background: var(--bg2); border-top: 3px solid var(--c); font-size: 12px; }
+.timeline b { display: block; font-size: 13px; color: var(--text); }
+.timeline span { color: var(--muted); }
+@media (max-width: 420px) { .timeline { grid-template-columns: 1fr 1fr; } }
+
+details summary { cursor: pointer; font-weight: 600; list-style: none; }
+details summary::-webkit-details-marker { display: none; }
+details summary::after { content: "▾"; float: right; color: var(--muted); }
+details:not([open]) summary::after { content: "▸"; }
+details ul { margin: 10px 0 0; padding-left: 18px; }
+details li { margin-bottom: 6px; font-size: 14px; }
+.verify { background: var(--warn-bg); border-color: rgba(242, 180, 90, .3); }
+.verify summary { color: var(--warn); }
+.hint { font-size: 13px; color: var(--muted); margin: 8px 0 0; }
+mark { background: rgba(242, 180, 90, .18); color: var(--warn); border-radius: 4px; padding: 0 3px; }
+
+.scene { --c: var(--gold); border-left: 3px solid var(--c); }
+.scene[data-act=hook] { --c: #8fb4ff; }
+.scene[data-act=rise] { --c: #d6b16a; }
+.scene[data-act=climax] { --c: #ff8a6b; }
+.scene[data-act=finale] { --c: #8fd9b6; }
+.timeline li[data-act=hook] { --c: #8fb4ff; }
+.timeline li[data-act=rise] { --c: #d6b16a; }
+.timeline li[data-act=climax] { --c: #ff8a6b; }
+.timeline li[data-act=finale] { --c: #8fd9b6; }
+
+.scene-head { display: flex; gap: 12px; align-items: center; margin-bottom: 6px; }
+.frame { width: 27px; height: 48px; border-radius: 5px; border: 2px solid var(--c); display: grid; place-items: center; flex: none; }
+.frame span { width: 9px; height: 9px; border-radius: 50%; background: radial-gradient(circle, #fff8e6 0%, var(--gold) 60%, transparent 70%); box-shadow: 0 0 10px var(--gold); }
+.scene-num { font-size: 12px; color: var(--muted); }
+.scene-act { font-weight: 700; color: var(--c); font-size: 17px; }
+.purpose { margin: 0 0 10px; font-size: 13px; color: var(--muted); }
+.facts { margin: 0; display: grid; grid-template-columns: 110px 1fr; gap: 6px 12px; font-size: 14px; }
+.facts dt { color: var(--muted); }
+.facts dd { margin: 0; }
+@media (max-width: 480px) { .facts { grid-template-columns: 1fr; gap: 0; } .facts dt { margin-top: 8px; font-size: 12px; text-transform: uppercase; letter-spacing: .05em; } }
+.scene-verify { list-style: none; padding: 0; margin: 10px 0 0; }
+.scene-verify li { font-size: 13px; color: var(--warn); background: var(--warn-bg); border-radius: 8px; padding: 6px 10px; margin-bottom: 6px; }
+.scene-verify li::before { content: "⚠ "; }
+
+.prompt-box { margin-top: 12px; }
+.prompt-head { display: flex; justify-content: space-between; align-items: center; margin: 8px 0 6px; font-size: 13px; color: var(--muted); }
+.prompt-box textarea { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 13px; line-height: 1.45; }
+
+.foot { text-align: center; color: var(--muted); font-size: 12px; padding: 16px 0 32px; }
+
+#toast {
+  position: fixed; left: 50%; bottom: calc(20px + env(safe-area-inset-bottom)); transform: translate(-50%, 20px);
+  background: var(--gold); color: #1a1408; font-weight: 600; font-size: 14px;
+  padding: 10px 16px; border-radius: 999px; opacity: 0; transition: .25s; pointer-events: none;
+}
+#toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+</style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <span class="logo" aria-hidden="true">☾</span>
+      <div>
+        <h1>Qalbiah Studio</h1>
+        <p class="tagline">Кинематографические исламские истории · Seedance 2.5 · 9:16</p>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <form id="form" class="card form" autocomplete="off">
+      <label class="field">
+        <span class="label">Тема истории</span>
+        <textarea id="topic" rows="2" maxlength="200" placeholder="Например: Терпение пророка Айюба (мир ему)" required></textarea>
+      </label>
+      <div class="chips" id="examples" aria-label="Примеры тем">
+        <button type="button" class="chip">Пророк Юнус (мир ему) во чреве кита</button>
+        <button type="button" class="chip">Пророк Ибрахим (мир ему) и огонь</button>
+        <button type="button" class="chip">Люди пещеры</button>
+        <button type="button" class="chip">Пророк Нух (мир ему) и ковчег</button>
+      </div>
+
+      <div class="field">
+        <span class="label">Количество сцен: <output id="scenesOut">6</output></span>
+        <div class="stepper">
+          <button type="button" class="step" data-step="-1" aria-label="Меньше сцен">−</button>
+          <input id="scenes" type="range" min="4" max="12" value="6">
+          <button type="button" class="step" data-step="1" aria-label="Больше сцен">+</button>
+        </div>
+      </div>
+
+      <div class="grid2">
+        <label class="field">
+          <span class="label">Место действия</span>
+          <select id="setting">
+            <option value="desert">Пустыня</option>
+            <option value="night">Ночь, звёзды</option>
+            <option value="sea">Море</option>
+            <option value="city">Древний город</option>
+            <option value="mountains">Горы, пещеры</option>
+            <option value="garden">Оазис</option>
+          </select>
+        </label>
+        <label class="field">
+          <span class="label">Настроение</span>
+          <select id="mood">
+            <option value="awe">Благоговение</option>
+            <option value="hope">Надежда</option>
+            <option value="trial">Испытание, терпение</option>
+            <option value="reflection">Размышление</option>
+            <option value="warning">Назидание</option>
+          </select>
+        </label>
+        <label class="field">
+          <span class="label">Визуальный стиль</span>
+          <select id="style">
+            <option value="cinematic">Фотореализм, кино</option>
+            <option value="painterly">Живописный</option>
+            <option value="minimal">Минимализм</option>
+          </select>
+        </label>
+        <label class="field">
+          <span class="label">Длина сцены</span>
+          <select id="duration">
+            <option value="5">5 секунд</option>
+            <option value="10">10 секунд</option>
+          </select>
+        </label>
+      </div>
+
+      <label class="toggle">
+        <input type="checkbox" id="hasProphet">
+        <span class="switch" aria-hidden="true"></span>
+        <span>В истории есть пророк <small id="detected"></small></span>
+      </label>
+      <label class="toggle">
+        <input type="checkbox" id="veilCompanions" checked>
+        <span class="switch" aria-hidden="true"></span>
+        <span>Скрывать лица сподвижников</span>
+      </label>
+
+      <button type="submit" class="btn primary">Сгенерировать историю</button>
+    </form>
+
+    <section id="result" hidden>
+      <div class="toolbar">
+        <button type="button" class="btn" id="regen">↻ Другой вариант</button>
+        <button type="button" class="btn" id="copyAll">Копировать все промпты</button>
+        <button type="button" class="btn" id="dlTxt">Скачать .txt</button>
+        <button type="button" class="btn" id="dlJson">Скачать .json</button>
+      </div>
+
+      <div class="card summary">
+        <h2 id="resTitle"></h2>
+        <div class="badges" id="badges"></div>
+        <ol class="timeline" id="timeline"></ol>
+      </div>
+
+      <details class="card rules" open>
+        <summary>Правила изображения</summary>
+        <ul id="rules"></ul>
+      </details>
+
+      <details class="card verify" open>
+        <summary>⚠ Требует проверки</summary>
+        <ul id="verify"></ul>
+        <p class="hint">Генератор не придумывает аяты, хадисы, имена и даты. Поля с меткой <mark>[ПРОВЕРИТЬ]</mark> заполните сами по Корану, достоверным хадисам и признанным тафсирам.</p>
+      </details>
+
+      <div id="scenesList"></div>
+    </section>
+
+    <footer class="foot">Работает офлайн · без API и ключей · данные хранятся только в вашем браузере</footer>
+  </main>
+
+  <div id="toast" role="status" aria-live="polite"></div>
+
+  <template id="sceneTpl">
+    <article class="card scene">
+      <div class="scene-head">
+        <div class="frame" aria-hidden="true"><span></span></div>
+        <div>
+          <div class="scene-num"></div>
+          <div class="scene-act"></div>
+        </div>
+      </div>
+      <p class="purpose"></p>
+      <dl class="facts">
+        <dt>Описание</dt><dd data-k="description"></dd>
+        <dt>Действие</dt><dd data-k="action"></dd>
+        <dt>Освещение</dt><dd data-k="lighting"></dd>
+        <dt>Камера</dt><dd data-k="camera"></dd>
+      </dl>
+      <ul class="scene-verify"></ul>
+      <div class="prompt-box">
+        <div class="prompt-head">
+          <span>Промпт Seedance 2.5</span>
+          <button type="button" class="btn small copy" data-what="prompt">Копировать</button>
+        </div>
+        <textarea class="prompt" rows="6" spellcheck="false"></textarea>
+        <div class="prompt-head">
+          <span>Negative prompt</span>
+          <button type="button" class="btn small copy" data-what="negative">Копировать</button>
+        </div>
+        <textarea class="negative" rows="2" spellcheck="false"></textarea>
+      </div>
+    </article>
+  </template>
+
+  <script>
+/*
+ * Qalbiah Studio — локальный генератор структуры истории и промптов Seedance 2.5.
+ * Работает полностью офлайн: никаких API, ключей и сетевых запросов.
+ *
+ * Принцип достоверности: движок НЕ создаёт религиозных фактов, цитат, аятов,
+ * хадисов, имён и дат. Он строит только кинематографический каркас и оставляет
+ * явные метки [ПРОВЕРИТЬ] там, где автор должен вставить сведения из источника.
+ */
+(function (root) {
+  'use strict';
+
+  // ---------- Справочники для распознавания ----------
+
+  // Пророки (рус./англ./араб. транслитерации). Совпадение включает правило «сияние вместо лица».
+  var PROPHETS = [
+    { id: 'muhammad', label: 'Пророк Мухаммад ﷺ', strict: true,
+      keys: ['мухаммад', 'мухаммед', 'магомед', 'посланник аллаха', 'посланника аллаха', 'muhammad', 'mohammed', 'mohammad', 'расулуллах'] },
+    { id: 'adam', label: 'Пророк Адам (мир ему)', keys: ['адам', 'adam'] },
+    { id: 'nuh', label: 'Пророк Нух (мир ему)', keys: ['нух', 'ной', 'ноя', 'nuh', 'noah'] },
+    { id: 'ibrahim', label: 'Пророк Ибрахим (мир ему)', keys: ['ибрахим', 'ибрагим', 'авраам', 'ibrahim', 'abraham'] },
+    { id: 'ismail', label: 'Пророк Исмаил (мир ему)', keys: ['исмаил', 'ismail', 'ishmael'] },
+    { id: 'ishaq', label: 'Пророк Исхак (мир ему)', keys: ['исхак', 'ishaq', 'isaac'] },
+    { id: 'yaqub', label: 'Пророк Якуб (мир ему)', keys: ['якуб', 'яакуб', 'yaqub', 'jacob'] },
+    { id: 'yusuf', label: 'Пророк Юсуф (мир ему)', keys: ['юсуф', 'иосиф', 'yusuf', 'joseph'] },
+    { id: 'musa', label: 'Пророк Муса (мир ему)', keys: ['муса', 'моисей', 'musa', 'moses'] },
+    { id: 'harun', label: 'Пророк Харун (мир ему)', keys: ['харун', 'аарон', 'harun', 'aaron'] },
+    { id: 'dawud', label: 'Пророк Дауд (мир ему)', keys: ['дауд', 'давуд', 'давид', 'dawud', 'david'] },
+    { id: 'sulayman', label: 'Пророк Сулейман (мир ему)', keys: ['сулейман', 'сулайман', 'соломон', 'sulayman', 'solomon'] },
+    { id: 'yunus', label: 'Пророк Юнус (мир ему)', keys: ['юнус', 'иона', 'yunus', 'jonah'] },
+    { id: 'ayyub', label: 'Пророк Айюб (мир ему)', keys: ['айюб', 'аюб', 'иов', 'ayyub', 'job'] },
+    { id: 'isa', label: 'Пророк Иса (мир ему)', keys: ['иса', 'иисус', 'isa', 'jesus'] },
+    { id: 'yahya', label: 'Пророк Яхья (мир ему)', keys: ['яхья', 'yahya'] },
+    { id: 'zakariya', label: 'Пророк Закария (мир ему)', keys: ['закария', 'zakariya', 'zechariah'] },
+    { id: 'salih', label: 'Пророк Салих (мир ему)', keys: ['салих', 'salih'] },
+    { id: 'hud', label: 'Пророк Худ (мир ему)', keys: ['пророк худ', 'пророка худа', 'prophet hud'] },
+    { id: 'shuayb', label: 'Пророк Шуайб (мир ему)', keys: ['шуайб', 'shuayb'] },
+    { id: 'lut', label: 'Пророк Лут (мир ему)', keys: ['пророк лут', 'пророка лута', 'prophet lut'] },
+    { id: 'idris', label: 'Пророк Идрис (мир ему)', keys: ['идрис', 'idris'] },
+    { id: 'ilyas', label: 'Пророк Ильяс (мир ему)', keys: ['ильяс', 'ilyas', 'elijah'] },
+    { id: 'alyasa', label: 'Пророк аль-Ясa (мир ему)', keys: ['аль-яса', 'альяса', 'al-yasa'] },
+    { id: 'dhulkifl', label: 'Пророк Зуль-Кифль (мир ему)', keys: ['зуль-кифль', 'зулькифль', 'dhul-kifl'] }
+  ];
+
+  var COMPANIONS = ['сподвижник', 'сахаб', 'абу бакр', 'умар', 'усман', 'османа', 'али ибн', 'фатима', 'хадиджа', 'аиша', 'билял', 'хамза', 'хасан', 'хусейн', 'companion', 'sahaba', 'abu bakr', 'umar', 'uthman', 'bilal', 'khadija', 'aisha', 'fatima'];
+  var ANGELS = ['ангел', 'джибрил', 'джабраил', 'микаил', 'исрафил', 'малаик', 'angel', 'jibril', 'gabriel'];
+  var SOURCE_WORDS = ['аят', 'сура', 'хадис', 'коран', 'сказал', 'сказано', 'передал', 'тафсир', 'сунна', 'quran', 'hadith', 'ayah', 'surah'];
+
+  // ---------- Визуальные пресеты ----------
+
+  var SETTINGS = {
+    desert: {
+      ru: 'бескрайняя пустыня с барханами',
+      en: 'vast desert with sweeping dunes',
+      details: ['следы на песке, заметаемые ветром', 'одинокий шатёр вдали', 'караван силуэтов на гребне бархана', 'песок, струящийся с камня'],
+      detailsEn: ['footprints in the sand being erased by wind', 'a lone tent in the distance', 'a caravan of silhouettes on a dune ridge', 'sand streaming off a rock']
+    },
+    night: {
+      ru: 'ночная пустыня под звёздным небом',
+      en: 'night desert under a dense starry sky',
+      details: ['Млечный Путь над горизонтом', 'тлеющие угли костра', 'тонкий серп луны', 'тени, вытянутые лунным светом'],
+      detailsEn: ['the Milky Way above the horizon', 'glowing embers of a campfire', 'a thin crescent moon', 'long shadows cast by moonlight']
+    },
+    sea: {
+      ru: 'тёмное бурное море',
+      en: 'dark stormy sea',
+      details: ['гребни волн в тусклом свете', 'брызги, застывшие в воздухе', 'горизонт, тонущий в тумане', 'деревянный корпус старого судна'],
+      detailsEn: ['wave crests in dim light', 'spray frozen in the air', 'a horizon dissolving into mist', 'the wooden hull of an ancient vessel']
+    },
+    city: {
+      ru: 'древний город из глиняного кирпича',
+      en: 'ancient mud-brick city',
+      details: ['узкие улочки с арками', 'пыльный рынок с тканями', 'масляные лампы в нишах стен', 'плоские крыши на закате'],
+      detailsEn: ['narrow alleys with arches', 'a dusty market with hanging fabrics', 'oil lamps in wall niches', 'flat rooftops at sunset']
+    },
+    mountains: {
+      ru: 'скалистые горы и ущелья',
+      en: 'rocky mountains and deep gorges',
+      details: ['вход в тёмную пещеру', 'облака, ползущие по склону', 'одинокое дерево на уступе', 'каменная тропа вверх'],
+      detailsEn: ['the mouth of a dark cave', 'clouds creeping down the slope', 'a lone tree on a ledge', 'a stone path winding upward'],
+    },
+    garden: {
+      ru: 'оазис с финиковыми пальмами и водой',
+      en: 'oasis with date palms and still water',
+      details: ['отражение пальм в воде', 'капли росы на листьях', 'тихий родник среди камней', 'птицы, взлетающие с ветвей'],
+      detailsEn: ['palms reflected in the water', 'dew drops on leaves', 'a quiet spring among stones', 'birds taking off from branches']
+    }
+  };
+
+  var MOODS = {
+    awe: { ru: 'благоговение', en: 'awe and reverence' },
+    hope: { ru: 'надежда', en: 'quiet hope' },
+    trial: { ru: 'испытание и терпение', en: 'trial and patience (sabr)' },
+    reflection: { ru: 'размышление', en: 'contemplation' },
+    warning: { ru: 'назидание', en: 'solemn warning' }
+  };
+
+  var STYLES = {
+    cinematic: 'photorealistic cinematic film look, anamorphic lens, shallow depth of field, subtle film grain',
+    painterly: 'painterly cinematic style, soft brush textures, oil-painting light, rich warm palette',
+    minimal: 'minimalist cinematic style, negative space, muted earthy palette, symbolic composition'
+  };
+
+  // ---------- Акты ----------
+
+  var ACTS = {
+    hook: {
+      title: 'Hook', ru: 'Крючок',
+      purpose: 'Захватить внимание в первые 1–3 секунды: загадка, контраст или вопрос.',
+      beats: [
+        { d: 'Резкий визуальный контраст: {detail}. Зритель ещё не понимает, где он, но чувствует: {mood}.', a: 'Кадр открывается на крупной детали и мгновенно раскрывает масштаб — {setting}.', ae: 'The shot opens on an extreme close-up detail — {detailEn} — then instantly reveals the scale of the {settingEn}.' },
+        { d: 'Тишина перед событием. {Setting}, в центре кадра — {detail}.', a: 'Ветер поднимает песок/пыль, звук стихает, в кадр медленно входит одинокая фигура со спины.', ae: 'Wind lifts dust across the frame, silence falls, a lone figure seen only from behind slowly enters the shot.' },
+        { d: 'Вопрос без ответа, заданный текстом на экране (напишите сами; без цитат из источников без проверки). Фон — {setting}.', a: 'Пауза: в кадре — {detail}, затем свет медленно меняется, будто что-то должно произойти.', ae: 'A held moment on {detailEn}, then the light slowly shifts as if something is about to happen.' }
+      ],
+      light: ['предрассветные сумерки, холодный синий с первой тёплой полосой на горизонте', 'контровой свет, силуэты на фоне яркого неба', 'низкий ключ: почти темнота и один узкий луч'],
+      lightEn: ['pre-dawn twilight, cold blue tones with the first warm line on the horizon', 'strong backlight, silhouettes against a bright sky', 'low-key lighting: near darkness pierced by a single narrow beam'],
+      camera: ['быстрый push-in (наезд) от общего плана к детали', 'резкий drone-reveal снизу вверх', 'статичный крупный план, затем rack focus на фон'],
+      cameraEn: ['fast push-in from wide shot to detail', 'dramatic drone reveal rising upward', 'static close-up, then rack focus to the background']
+    },
+    rise: {
+      title: 'Развитие', ru: 'Развитие',
+      purpose: 'Раскрыть обстоятельства и нарастающее напряжение.',
+      beats: [
+        { d: 'Знакомство с обстоятельствами истории «{topic}». Подробности события — [ПРОВЕРИТЬ: опишите по источнику].', a: 'Персонажи показаны со спины или в силуэте, медленно движутся по кадру, место действия — {setting}; в фокусе — {detail}.', ae: 'Characters shown from behind or in silhouette move through the {settingEn}; focus on {detailEn}.' },
+        { d: 'Нарастание напряжения: трудность или испытание. Что именно произошло — [ПРОВЕРИТЬ по источнику].', a: 'Руки крупным планом: сжатые пальцы, дрожащая ладонь, дуа с поднятыми руками (без лиц).', ae: 'Close-up of hands only: clenched fingers, a trembling palm, hands raised in supplication; no faces visible.' },
+        { d: 'Смена места или времени. {Setting}: {detail}.', a: 'Таймлапс облаков и теней, фигуры уменьшаются на фоне пейзажа.', ae: 'Timelapse of clouds and moving shadows, figures shrinking against the vast landscape.' },
+        { d: 'Внутреннее состояние героя через окружение — {mood}. Без вымышленных реплик.', a: 'Медленный проход вдоль следов/дороги, на заднем плане — {detail}.', ae: 'Slow tracking along footprints on a path, with {detailEn} in the background.' },
+        { d: 'Люди вокруг реагируют на происходящее. Состав и роль людей — [ПРОВЕРИТЬ по источнику].', a: 'Группа силуэтов, ткань одежд колышется на ветру, лица в тени или вне фокуса.', ae: 'A group of silhouettes, robes rippling in the wind, faces in deep shadow or out of focus.' }
+      ],
+      light: ['золотой час, тёплый боковой свет, длинные тени', 'рассеянный дневной свет сквозь пыль', 'мягкий свет масляных ламп, тёплый янтарь'],
+      lightEn: ['golden hour, warm side light, long shadows', 'diffused daylight through hanging dust', 'soft oil-lamp light, warm amber tones'],
+      camera: ['плавный dolly-in', 'боковой tracking shot', 'медленный орбитальный облёт', 'steadicam за героем со спины'],
+      cameraEn: ['smooth dolly-in', 'lateral tracking shot', 'slow orbital move', 'steadicam following the character from behind']
+    },
+    climax: {
+      title: 'Кульминация', ru: 'Кульминация',
+      purpose: 'Пиковый момент: испытание, чудо или решающий выбор.',
+      beats: [
+        { d: 'Пиковый момент истории «{topic}». Суть события — [ПРОВЕРИТЬ: только по Корану/достоверному хадису/тафсиру].', a: 'Стихия приходит в движение: {detail}; масштаб подчёркивает величие происходящего.', ae: 'The elements surge into motion: {detailEn}; the vast scale emphasizes the magnitude of the moment.' },
+        { d: 'Абсолютная тишина и один решающий жест. Значение момента — [ПРОВЕРИТЬ по источнику].', a: 'Время замедляется (slow motion), частицы пыли и света висят в воздухе.', ae: 'Time slows into slow motion, particles of dust and light suspended in the air.' }
+      ],
+      light: ['драматичный контраст: тёмное небо и прорывающийся столб света', 'вспышка мягкого белого света, заливающая кадр', 'грозовое освещение, вспышки и глубокие тени'],
+      lightEn: ['dramatic contrast: dark sky with a breaking column of light', 'a soft white glow flooding the frame', 'stormy lighting, flashes and deep shadows'],
+      camera: ['мощный crane-up (подъём крана) над сценой', 'медленный dolly-zoom (эффект вертиго)', 'низкий ракурс снизу вверх, медленный наезд'],
+      cameraEn: ['powerful crane-up rising above the scene', 'slow dolly zoom (vertigo effect)', 'low-angle shot looking up, slow push-in']
+    },
+    finale: {
+      title: 'Финал', ru: 'Финал',
+      purpose: 'Разрешение и урок; спокойное послание зрителю.',
+      beats: [
+        { d: 'Успокоение после бури: {setting}, {detail}. Урок истории формулирует автор — [ПРОВЕРИТЬ: вывод должен опираться на источник].', a: 'Камера медленно отдаляется, герой в силуэте уходит к горизонту.', ae: 'The camera slowly pulls away as a silhouetted figure walks toward the horizon.' },
+        { d: 'Тихий финальный образ для текста-вывода и призыва подписаться на Qalbiah.', a: 'Статичный кадр, свет постепенно становится тёплым, оставляя место для титров вверху и внизу.', ae: 'Static frame, the light gradually warms, leaving clean negative space at the top and bottom for captions.' }
+      ],
+      light: ['рассвет: мягкий тёплый свет, надежда', 'спокойный закат, розово-золотое небо', 'лунный свет и тёплый огонёк лампы'],
+      lightEn: ['sunrise: soft warm light conveying hope', 'calm sunset, rose and gold sky', 'moonlight with a small warm lamp glow'],
+      camera: ['медленный pull-back (отъезд) в общий план', 'плавный подъём камеры к небу', 'статичный широкий план с лёгким дрейфом'],
+      cameraEn: ['slow pull-back to a wide shot', 'gentle tilt-up toward the sky', 'static wide shot with a subtle drift']
+    }
+  };
+
+  // ---------- Утилиты ----------
+
+  function hashString(s) {
+    var h = 2166136261;
+    for (var i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); }
+    return h >>> 0;
+  }
+
+  function rng(seed) {
+    var t = seed >>> 0;
+    return function () {
+      t += 0x6D2B79F5;
+      var r = Math.imul(t ^ (t >>> 15), 1 | t);
+      r ^= r + Math.imul(r ^ (r >>> 7), 61 | r);
+      return ((r ^ (r >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+
+  function pick(arr, rand) { return arr[Math.floor(rand() * arr.length)]; }
+
+  function capitalize(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
+
+  function fill(tpl, ctx) {
+    return tpl
+      .replace(/\{topic\}/g, ctx.topic)
+      .replace(/\{Setting\}/g, capitalize(ctx.setting))
+      .replace(/\{setting\}/g, ctx.setting)
+      .replace(/\{settingEn\}/g, ctx.settingEn)
+      .replace(/\{detailEn\}/g, ctx.detailEn)
+      .replace(/\{detail\}/g, ctx.detail)
+      .replace(/\{mood\}/g, ctx.mood);
+  }
+
+  // Распределение сцен по актам: Hook — 1, Финал — 1, Кульминация — 1–2, остальное — Развитие.
+  function distributeActs(n) {
+    n = Math.max(4, Math.min(12, n | 0));
+    var climax = n >= 9 ? 2 : 1;
+    var rise = n - 2 - climax;
+    var plan = ['hook'];
+    for (var i = 0; i < rise; i++) plan.push('rise');
+    for (var j = 0; j < climax; j++) plan.push('climax');
+    plan.push('finale');
+    return plan;
+  }
+
+  function normalize(s) { return String(s || '').toLowerCase().replace(/ё/g, 'е'); }
+
+  // Совпадение по границе слова с допустимыми падежными окончаниями (Мусы, Юсуфа, Ибрахиме…).
+  var ENDINGS = '(?:а|у|е|ом|ым|ы|ой|ем|я|ю|и|ов|ам|ах|s)?';
+  function hasWord(text, key) {
+    var esc = key.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    if (/[ая]$/.test(esc) && esc.length > 3) esc = esc.slice(0, -1) + '[ая]?';
+    return new RegExp('(^|[^a-zа-я])' + esc + ENDINGS + '(?=$|[^a-zа-я])').test(text);
+  }
+  function hasStem(text, key) { return text.indexOf(key) !== -1; }
+
+  function analyzeTopic(topic) {
+    var t = normalize(topic);
+    var prophets = PROPHETS.filter(function (p) {
+      return p.keys.some(function (k) { return hasWord(t, k); });
+    });
+    return {
+      prophets: prophets,
+      genericProphet: /пророк|prophet|наби|расул/.test(t),
+      hasStrictProphet: prophets.some(function (p) { return p.strict; }),
+      companions: COMPANIONS.some(function (k) { return k.length > 5 ? hasStem(t, k) : hasWord(t, k); }),
+      angels: ANGELS.some(function (k) { return hasStem(t, k); }),
+      mentionsSources: SOURCE_WORDS.some(function (k) { return hasStem(t, k); })
+    };
+  }
+
+  // ---------- Правила изображения ----------
+
+  function depictionRules(opts, analysis) {
+    var rules = [];
+    var promptEn = [];
+    var negative = ['visible face of any prophet', 'facial features on veiled figures', 'text', 'watermark', 'logo', 'subtitles', 'cartoonish style', 'idols or statues being venerated', 'musical instruments'];
+
+    if (opts.hasProphet || analysis.prophets.length || analysis.genericProphet) {
+      rules.push('Лицо пророка никогда не показывается: на его месте — мягкое, сдержанное сияние без различимых черт.');
+      promptEn.push('the prophet\'s face is completely concealed by a soft, restrained warm glow with no discernible features; never show his face');
+      negative.push('prophet face', 'prophet portrait', 'eyes, nose or mouth of the prophet');
+    }
+    if (analysis.hasStrictProphet) {
+      rules.push('Пророк Мухаммад ﷺ: не изображать фигуру вовсе (ни тела, ни силуэта) — только окружение, свет и следы присутствия: открытая дверь, луч света, место, где он находился.');
+      promptEn.push('the Prophet Muhammad (peace be upon him) is not depicted at all — no body, no silhouette; his presence is suggested only through environment and gentle light');
+      negative.push('any human figure representing the Prophet Muhammad');
+    }
+    if (opts.veilCompanions || analysis.companions) {
+      rules.push('Сподвижники и члены семьи Пророка ﷺ: показывать только со спины, в силуэте или вне фокуса, без различимых лиц.');
+      promptEn.push('companions are shown only from behind, in silhouette or out of focus, faces never visible');
+    }
+    if (analysis.angels) {
+      rules.push('Ангелы не изображаются в человеческом облике — только как свет или ощущение присутствия.');
+      promptEn.push('angels are never shown in human or winged form, only implied by pure light');
+      negative.push('winged humans', 'angel figure');
+    }
+    rules.push('Скромная одежда, исторически уместные детали; без музыки и инструментов в кадре (звук — природа или нашид без инструментов, на усмотрение автора).');
+    rules.push('Никакого текста, аятов или арабской каллиграфии внутри генерации — нейросеть искажает текст. Аяты добавляйте на монтаже из проверенного источника.');
+    return { rules: rules, promptEn: promptEn, negative: negative };
+  }
+
+  // ---------- Генерация ----------
+
+  function generate(opts) {
+    var topic = String(opts.topic || '').trim();
+    if (!topic) throw new Error('Введите тему истории');
+    var n = Math.max(4, Math.min(12, parseInt(opts.scenes, 10) || 6));
+    var setting = SETTINGS[opts.setting] || SETTINGS.desert;
+    var mood = MOODS[opts.mood] || MOODS.awe;
+    var style = STYLES[opts.style] || STYLES.cinematic;
+    var duration = parseInt(opts.duration, 10) || 5;
+    var variant = opts.variant | 0;
+    var rand = rng(hashString(topic + '|' + n + '|' + variant));
+
+    var analysis = analyzeTopic(topic);
+    var dep = depictionRules(opts, analysis);
+    var plan = distributeActs(n);
+    var used = {};
+
+    var scenes = plan.map(function (actKey, i) {
+      var act = ACTS[actKey];
+      // берём неповторяющийся бит внутри акта, пока это возможно
+      var beatIdx = Math.floor(rand() * act.beats.length);
+      var tries = 0;
+      while (used[actKey + beatIdx] && tries < act.beats.length) { beatIdx = (beatIdx + 1) % act.beats.length; tries++; }
+      used[actKey + beatIdx] = true;
+      var beat = act.beats[beatIdx];
+
+      var dIdx = Math.floor(rand() * setting.details.length);
+      var lIdx = Math.floor(rand() * act.light.length);
+      var cIdx = Math.floor(rand() * act.camera.length);
+      var ctx = {
+        topic: topic, setting: setting.ru, settingEn: setting.en,
+        detail: setting.details[dIdx], detailEn: setting.detailsEn[dIdx], mood: mood.ru
+      };
+
+      var description = fill(beat.d, ctx);
+      var action = fill(beat.a, ctx);
+      var lighting = act.light[lIdx];
+      var camera = act.camera[cIdx];
+
+      var verify = [];
+      if (/ПРОВЕРИТЬ/.test(description)) verify.push('Фактическое содержание сцены нужно заполнить по источнику (Коран, достоверный хадис, признанный тафсир).');
+      if (actKey === 'finale') verify.push('Вывод/урок истории не должен приписывать источникам то, чего в них нет.');
+      if (actKey === 'hook' && /текстом на экране/.test(description)) verify.push('Текст на экране пишите сами; если цитируете — только дословно, с номером аята/хадиса.');
+
+      var prompt = buildPrompt({
+        act: act, actionEn: fill(beat.ae, ctx), lightEn: act.lightEn[lIdx], cameraEn: act.cameraEn[cIdx],
+        setting: setting, mood: mood, style: style, duration: duration, dep: dep, topic: topic
+      });
+
+      return {
+        index: i + 1,
+        act: actKey,
+        actTitle: act.title,
+        purpose: act.purpose,
+        description: description,
+        action: action,
+        lighting: lighting,
+        camera: camera,
+        duration: duration,
+        verify: verify,
+        prompt: prompt,
+        negative: dep.negative.join(', ')
+      };
+    });
+
+    var globalVerify = [
+      'Все исторические и религиозные сведения о теме «' + topic + '» проверьте по первоисточникам до публикации.',
+      'Не используйте аяты и хадисы по памяти — копируйте текст и ссылку (сура:аят, сборник и номер хадиса) из проверенного издания.',
+      'Уточните степень достоверности хадисов (сахих/хасан/даиф) и избегайте сомнительных преданий (исраилийат) без пометки.'
+    ];
+    if (analysis.mentionsSources) globalVerify.unshift('В теме упомянуты аят/хадис/сура — генератор их НЕ цитирует. Вставьте точный текст из источника.');
+    if (!analysis.prophets.length && !analysis.genericProphet && !opts.hasProphet) globalVerify.push('Если в истории участвует пророк, включите переключатель «В истории есть пророк» — тема не распознала имя.');
+
+    return {
+      app: 'Qalbiah Studio',
+      createdAt: new Date().toISOString(),
+      topic: topic,
+      format: { aspectRatio: '9:16', resolution: '1080x1920', sceneDuration: duration, totalDuration: duration * n },
+      settings: { scenes: n, setting: opts.setting || 'desert', mood: opts.mood || 'awe', style: opts.style || 'cinematic' },
+      analysis: {
+        prophets: analysis.prophets.map(function (p) { return p.label; }),
+        genericProphet: analysis.genericProphet,
+        companions: analysis.companions,
+        angels: analysis.angels
+      },
+      rules: dep.rules,
+      verify: globalVerify,
+      structure: ['hook', 'rise', 'climax', 'finale'].map(function (k) {
+        return { act: k, title: ACTS[k].title, purpose: ACTS[k].purpose,
+          scenes: scenes.filter(function (s) { return s.act === k; }).map(function (s) { return s.index; }) };
+      }),
+      scenes: scenes
+    };
+  }
+
+  function buildPrompt(p) {
+    var parts = [
+      'Vertical 9:16 video, 1080x1920, ' + p.duration + ' seconds.',
+      capitalize(p.style) + '.',
+      'Setting: ' + p.setting.en + '.',
+      p.actionEn,
+      'Camera: ' + p.cameraEn + '.',
+      'Lighting: ' + p.lightEn + '.',
+      'Mood: ' + p.mood.en + ', Islamic historical atmosphere, modest clothing, authentic ancient Middle Eastern details.'
+    ];
+    if (p.dep.promptEn.length) parts.push('Depiction rules: ' + p.dep.promptEn.join('; ') + '.');
+    parts.push('Composition centered for vertical framing, safe space for captions, no text in frame.');
+    return parts.join(' ');
+  }
+
+  // ---------- Экспорт в текст ----------
+
+  function toText(project) {
+    var out = [];
+    out.push('QALBIAH STUDIO — ' + project.topic);
+    out.push('Формат: 9:16 (1080x1920), сцен: ' + project.scenes.length + ', ~' + project.format.totalDuration + ' с');
+    out.push('');
+    out.push('ПРАВИЛА ИЗОБРАЖЕНИЯ:');
+    project.rules.forEach(function (r) { out.push('• ' + r); });
+    out.push('');
+    out.push('ТРЕБУЕТ ПРОВЕРКИ:');
+    project.verify.forEach(function (r) { out.push('⚠ ' + r); });
+    project.scenes.forEach(function (s) {
+      out.push('');
+      out.push('— СЦЕНА ' + s.index + ' · ' + s.actTitle + ' (' + s.duration + ' с) —');
+      out.push('Описание: ' + s.description);
+      out.push('Действие: ' + s.action);
+      out.push('Освещение: ' + s.lighting);
+      out.push('Камера: ' + s.camera);
+      s.verify.forEach(function (v) { out.push('⚠ Проверить: ' + v); });
+      out.push('Seedance 2.5 prompt: ' + s.prompt);
+      out.push('Negative: ' + s.negative);
+    });
+    return out.join('\n');
+  }
+
+  var api = { generate: generate, toText: toText, analyzeTopic: analyzeTopic, distributeActs: distributeActs, SETTINGS: SETTINGS, MOODS: MOODS, STYLES: STYLES };
+  if (typeof module !== 'undefined' && module.exports) module.exports = api;
+  else root.QalbiahEngine = api;
+})(typeof window !== 'undefined' ? window : this);
+
+</script>
+  <script>
+(function () {
+  'use strict';
+  var E = window.QalbiahEngine;
+  var $ = function (id) { return document.getElementById(id); };
+  var STORE = 'qalbiah-studio:last';
+  var FIELDS = ['topic', 'scenes', 'setting', 'mood', 'style', 'duration', 'hasProphet', 'veilCompanions'];
+  var ACT_ORDER = ['hook', 'rise', 'climax', 'finale'];
+  var state = { variant: 0, project: null };
+
+  function readForm() {
+    var o = {};
+    FIELDS.forEach(function (f) { var el = $(f); o[f] = el.type === 'checkbox' ? el.checked : el.value; });
+    o.variant = state.variant;
+    return o;
+  }
+
+  function writeForm(o) {
+    FIELDS.forEach(function (f) {
+      if (!(f in o)) return;
+      var el = $(f);
+      if (el.type === 'checkbox') el.checked = !!o[f]; else el.value = o[f];
+    });
+    $('scenesOut').textContent = $('scenes').value;
+  }
+
+  function save() {
+    try { localStorage.setItem(STORE, JSON.stringify({ form: readForm(), variant: state.variant })); } catch (e) { /* приватный режим */ }
+  }
+
+  function load() {
+    try {
+      var raw = localStorage.getItem(STORE);
+      if (!raw) return false;
+      var d = JSON.parse(raw);
+      writeForm(d.form || {});
+      state.variant = d.variant | 0;
+      return !!(d.form && d.form.topic);
+    } catch (e) { return false; }
+  }
+
+  function toast(msg) {
+    var t = $('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    clearTimeout(toast.timer);
+    toast.timer = setTimeout(function () { t.classList.remove('show'); }, 1600);
+  }
+
+  function copy(text) {
+    var done = function () { toast('Скопировано'); };
+    if (navigator.clipboard && window.isSecureContext) {
+      navigator.clipboard.writeText(text).then(done, function () { fallbackCopy(text); done(); });
+    } else { fallbackCopy(text); done(); }
+  }
+
+  function fallbackCopy(text) {
+    var ta = document.createElement('textarea');
+    ta.value = text; ta.setAttribute('readonly', '');
+    ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta); ta.select();
+    try { document.execCommand('copy'); } catch (e) { /* ignore */ }
+    document.body.removeChild(ta);
+  }
+
+  function download(name, text, type) {
+    var url = URL.createObjectURL(new Blob([text], { type: type }));
+    var a = document.createElement('a');
+    a.href = url; a.download = name;
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
+  }
+
+  // Имя файла латиницей: часть браузеров отбрасывает кириллицу в атрибуте download.
+  var TR = { а: 'a', б: 'b', в: 'v', г: 'g', д: 'd', е: 'e', ё: 'e', ж: 'zh', з: 'z', и: 'i', й: 'y', к: 'k', л: 'l', м: 'm', н: 'n', о: 'o', п: 'p', р: 'r', с: 's', т: 't', у: 'u', ф: 'f', х: 'h', ц: 'ts', ч: 'ch', ш: 'sh', щ: 'sch', ъ: '', ы: 'y', ь: '', э: 'e', ю: 'yu', я: 'ya' };
+  function slug(s) {
+    var latin = s.toLowerCase().replace(/[а-яё]/g, function (c) { return TR[c]; });
+    return (latin.replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 40) || 'story');
+  }
+
+  // Подсветка меток [ПРОВЕРИТЬ ...] без innerHTML с пользовательским текстом.
+  function setMarked(el, text) {
+    el.textContent = '';
+    text.split(/(\[ПРОВЕРИТЬ[^\]]*\])/).forEach(function (part) {
+      if (!part) return;
+      if (/^\[ПРОВЕРИТЬ/.test(part)) { var m = document.createElement('mark'); m.textContent = part; el.appendChild(m); }
+      else el.appendChild(document.createTextNode(part));
+    });
+  }
+
+  function list(ul, items) {
+    ul.textContent = '';
+    items.forEach(function (t) { var li = document.createElement('li'); li.textContent = t; ul.appendChild(li); });
+  }
+
+  function render(p) {
+    $('resTitle').textContent = p.topic;
+
+    var badges = $('badges');
+    badges.textContent = '';
+    var b = ['9:16 · 1080×1920', p.scenes.length + ' сцен', '≈ ' + p.format.totalDuration + ' с'];
+    p.analysis.prophets.forEach(function (n) { b.push('✦ ' + n); });
+    b.forEach(function (t, i) {
+      var s = document.createElement('span');
+      s.className = 'badge' + (i === 0 || t.charAt(0) === '✦' ? ' gold' : '');
+      s.textContent = t; badges.appendChild(s);
+    });
+
+    var tl = $('timeline');
+    tl.textContent = '';
+    p.structure.forEach(function (a) {
+      var li = document.createElement('li');
+      li.dataset.act = a.act;
+      var bEl = document.createElement('b'); bEl.textContent = a.title;
+      var sp = document.createElement('span');
+      sp.textContent = a.scenes.length === 1 ? 'сцена ' + a.scenes[0] : 'сцены ' + a.scenes[0] + '–' + a.scenes[a.scenes.length - 1];
+      li.appendChild(bEl); li.appendChild(sp); tl.appendChild(li);
+    });
+
+    list($('rules'), p.rules);
+    list($('verify'), p.verify);
+
+    var box = $('scenesList');
+    box.textContent = '';
+    var tpl = $('sceneTpl');
+    p.scenes.forEach(function (s, i) {
+      var node = tpl.content.firstElementChild.cloneNode(true);
+      node.dataset.act = s.act;
+      node.querySelector('.scene-num').textContent = 'Сцена ' + s.index + ' из ' + p.scenes.length + ' · ' + s.duration + ' с';
+      node.querySelector('.scene-act').textContent = s.actTitle;
+      node.querySelector('.purpose').textContent = s.purpose;
+      node.querySelectorAll('dd[data-k]').forEach(function (dd) { setMarked(dd, s[dd.dataset.k]); });
+      list(node.querySelector('.scene-verify'), s.verify);
+      var pr = node.querySelector('.prompt'), ng = node.querySelector('.negative');
+      pr.value = s.prompt; ng.value = s.negative;
+      // ручные правки промпта сохраняются в проекте и попадают в экспорт
+      pr.addEventListener('input', function () { p.scenes[i].prompt = pr.value; });
+      ng.addEventListener('input', function () { p.scenes[i].negative = ng.value; });
+      node.querySelectorAll('.copy').forEach(function (btn) {
+        btn.addEventListener('click', function () { copy(btn.dataset.what === 'prompt' ? pr.value : ng.value); });
+      });
+      box.appendChild(node);
+    });
+
+    $('result').hidden = false;
+  }
+
+  function run(scroll) {
+    var opts = readForm();
+    if (!opts.topic.trim()) { $('topic').focus(); toast('Введите тему истории'); return; }
+    state.project = E.generate(opts);
+    render(state.project);
+    save();
+    if (scroll) $('result').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  function updateDetected() {
+    var a = E.analyzeTopic($('topic').value);
+    var names = a.prophets.map(function (p) { return p.label; });
+    $('detected').textContent = names.length ? 'Распознано: ' + names.join(', ') : (a.genericProphet ? 'Распознано: упоминание пророка' : '');
+    if (names.length || a.genericProphet) $('hasProphet').checked = true;
+  }
+
+  // ---------- события ----------
+
+  $('form').addEventListener('submit', function (e) { e.preventDefault(); state.variant = 0; run(true); });
+  $('regen').addEventListener('click', function () { state.variant++; run(false); toast('Новый вариант'); });
+
+  $('scenes').addEventListener('input', function () { $('scenesOut').textContent = this.value; });
+  document.querySelectorAll('.step').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var r = $('scenes');
+      r.value = Math.max(4, Math.min(12, (+r.value) + (+btn.dataset.step)));
+      $('scenesOut').textContent = r.value;
+    });
+  });
+
+  $('topic').addEventListener('input', updateDetected);
+  $('topic').addEventListener('keydown', function (e) {
+    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); $('form').requestSubmit(); }
+  });
+  document.querySelectorAll('#examples .chip').forEach(function (c) {
+    c.addEventListener('click', function () { $('topic').value = c.textContent; updateDetected(); $('topic').focus(); });
+  });
+
+  $('copyAll').addEventListener('click', function () {
+    if (!state.project) return;
+    copy(state.project.scenes.map(function (s) { return 'Scene ' + s.index + ' (' + s.actTitle + '):\n' + s.prompt; }).join('\n\n'));
+  });
+  $('dlTxt').addEventListener('click', function () {
+    if (state.project) download('qalbiah-' + slug(state.project.topic) + '.txt', E.toText(state.project), 'text/plain;charset=utf-8');
+  });
+  $('dlJson').addEventListener('click', function () {
+    if (state.project) download('qalbiah-' + slug(state.project.topic) + '.json', JSON.stringify(state.project, null, 2), 'application/json');
+  });
+
+  if (load()) { updateDetected(); run(false); }
+})();
+
+</script>
+</body>
+</html>

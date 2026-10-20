@@ -399,4 +399,4 @@
   var api = { generate: generate, toText: toText, analyzeTopic: analyzeTopic, distributeActs: distributeActs, SETTINGS: SETTINGS, MOODS: MOODS, STYLES: STYLES };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   else root.QalbiahEngine = api;
-})(this);
+})(typeof window !== 'undefined' ? window : this);
