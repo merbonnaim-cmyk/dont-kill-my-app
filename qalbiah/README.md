@@ -7,7 +7,7 @@ CLAUDE.md                                   постоянные правила 
   islamic-researcher.md   — проверка фактов, аятов, хадисов
   english-adapter.md      — перевод и культурная адаптация
   scriptwriter.md         — кинематографический сценарий
-  visual-director.md      — сцены, continuity, промпты Seedance 2.5
+  visual-director.md      — сцены, continuity, промпты Google Veo
   youtube-strategist.md   — заголовки, описание, обложки, ключевые слова
   quality-reviewer.md     — контроль качества, вердикт PASS / NEEDS_REVISION
 .claude/skills/qalbiah-production/SKILL.md  главный конвейер (8 этапов)
