@@ -23,7 +23,7 @@ model: inherit
 3. Обложка соблюдает правила изображения людей style guide (никаких лиц пророков, Пророк ﷺ — без фигуры). ≤ 4 слов текста.
 4. Почтительные формулы в описании — по style guide. Аяты в описании — только из `02-research.md`, со ссылкой.
 5. Описание обязательно содержит: раздел Sources (только проверенные ссылки из отчёта исследователя) и пометку:
-   "Visuals are artistic reconstructions created with AI and do not depict the actual appearance of any prophet or person."
+   "The animation is an artistic reconstruction created with AI and does not depict the actual appearance of any prophet or person."
 6. Тайм-коды глав для long-видео — ориентировочные по сценарию, с пометкой «update after final edit».
 7. Хэштеги: 3–5, релевантные; для Shorts — #Shorts можно добавить.
 
@@ -43,7 +43,7 @@ model: inherit
 <готовый текст для вставки>
 ## Chapters (long only, approximate — update after final edit)
 ## Thumbnail concepts
-1. **Concept name** — composition, subject (no prophet faces), lighting/palette, text overlay (≤4 words), source frame (Scene NN or new generation prompt)
+1. **Concept name** — 2D motion style frame, composition, subject (no prophet faces), lighting/palette, text overlay (≤4 words), source frame (Scene NN or new generation prompt)
 ## Keywords / tags (relevant terms — validate in YouTube search suggest / Studio)
 ## Hashtags
 ## Pinned comment
